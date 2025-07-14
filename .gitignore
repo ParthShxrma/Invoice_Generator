@@ -47,4 +47,5 @@ coverage/
 
 #Firebase config
 firebase-debug.log
+
 .env
