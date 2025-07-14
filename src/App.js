@@ -1,88 +1,95 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import InvoiceForm from "./components/InvoiceForm";
+import Dashboard from "./components/Dashboard";
+import { useAuth } from "./AuthContext";
+import "./App.css";
 
 function App() {
-  const [posts] = useState([
-    {
-      username: "By- Parth Sharma",
-      timestamp: new Date(),
-    },
-  ]);
+  const { user } = useAuth();
 
   return (
     <Router>
       <Navbar />
 
       <Routes>
-        {/* Homepage Route */}
+        
         <Route
           path="/"
           element={
-            <div>
-              <center>
-                <h1>Invoice Generation Software</h1>
-              </center>
+            <div className="landing-page">
+              <div
+                className="hero"
+                style={{
+                  backgroundImage: `url(${process.env.PUBLIC_URL}/hero.jpg)`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  minHeight: "80vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "40px 20px",
+                  position: "relative",
+                }}
+              >
+                <div className="hero-overlay">
+                  {user && <h3 className="user-name">Hi there, {user.displayName}</h3>}
+                  <h1>Welcome to InvoPro</h1>
+                  <p>The easiest way to generate clean, professional invoices.</p>
+                </div>
+              </div>
 
-              <img
-                src="logo512.png"
-                alt="Secure and Reliable"
-                style={{ maxWidth: "40%", borderRadius: "8px", float: "right" }}
-              />
-
+              
               <section className="features">
                 <div className="feature">
                   <h2>Easy to Use</h2>
-                  <p>Intuitive and user-friendly interface for quick invoicing.</p>
+                  <p>No learning curve. Fill in your details and generate invoices instantly.</p>
                 </div>
+
+                <div className="feature">
+                  <h2>Secure and Reliable</h2>
+                  <p>Your invoice data stays on your device. No cloud storage, full control.</p>
+                  <img src={`${process.env.PUBLIC_URL}/features.jpg`} alt="Secure and Reliable" />
+                </div>
+
                 <div className="feature">
                   <h2>Customizable Templates</h2>
-                  <p>Create professional invoices with customizable templates.</p>
-                </div>
-                <div className="feature text-with-image">
-                  <div style={{ float: "left", marginRight: "20px" }}>
-                    <h2>Secure and Reliable</h2>
-                    <p>Your data is safe and transactions are securely processed.</p>
-                  </div>
+                  <p>Personalize your invoice layout, colors, and branding in seconds.</p>
                 </div>
               </section>
 
+              
               <section className="testimonials">
                 <h2>What Our Users Say</h2>
                 <p>
-                  "The invoice generation software has streamlined our billing process.
-                  It's a game-changer!"
+                  "InvoPro saves me hours of formatting invoices every month. It's
+                  clean, efficient, and professional!"
                 </p>
-              </section>
-
-              <section className="cta">
-                <h2>Start Invoicing Today</h2>
-                <p>
-                  Experience the convenience of our invoice generation software. Get
-                  started now!
-                </p>
-
-                {/* Link to Invoice Generator Page */}
-                <Link to="/invoice">
-                  <button style={{ marginTop: "20px", padding: "10px 20px" }}>
-                    Go to Invoice Generator
-                  </button>
-                </Link>
               </section>
             </div>
           }
         />
 
-        {/* Invoice Generator Page */}
+        
         <Route
           path="/invoice"
           element={
             <div className="App">
-              <h2 style={{ textAlign: "center", marginTop: "20px" }}>Generate Your Invoice</h2>
               <InvoiceForm />
+            </div>
+          }
+        />
+
+        
+        <Route
+          path="/dashboard"
+          element={
+            <div className="App">
+              <Dashboard />
             </div>
           }
         />

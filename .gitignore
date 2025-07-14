@@ -1,0 +1,50 @@
+#dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+#testing
+/coverage
+
+#production
+/build
+/dist
+#misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+#logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+#IDE/editor folders
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.sln
+*.sw?
+
+#Mac system files
+.DS_Store
+
+#Generated files
+*.log
+
+#local storage or other sensitive data files(if any)
+# You generally don't commit localStoragedata, but if you store files,add them here 
+#firebase emulator and local store
+.firebase/
+.firebaseserc
+
+#coverage
+coverage/
+
+#Firebase config
+firebase-debug.log
+.env

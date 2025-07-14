@@ -10,8 +10,9 @@
   margin: 40px auto;
   padding: 40px;
   font-family: Arial, sans-serif;
-  background: #fff;
+  background: var(--invoice-bg, #ffffff);
   border: 1px solid #ccc;
+  border-radius: 10px;
 }
 
 .header {
@@ -191,4 +192,8 @@
   .invoice-table input {
     display: none !important;
   }
+}
+[data-theme="dark"]{
+  --invoice-bg: #1f1f1f;
+  --text-color: #f0f0f0;
 }
