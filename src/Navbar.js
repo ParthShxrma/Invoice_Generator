@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import { FaSun, FaMoon, FaBars, FaChevronDown } from "react-icons/fa";
+import { AiFillHome } from "react-icons/ai";
+import { MdDashboard } from "react-icons/md";
 import { useAuth } from "./AuthContext";
 
 function Navbar() {
@@ -10,6 +12,7 @@ function Navbar() {
   });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const location = useLocation();
 
   const { user, login, logout } = useAuth();
 
@@ -23,21 +26,40 @@ function Navbar() {
   const closeMenu = () => setIsMobileMenuOpen(false);
   const toggleDropdown = () => setShowDropdown(!showDropdown);
 
+  // Determine active tab index for slider positioning
+  const tabs = ["/", "/dashboard"];
+  const activeIndex = tabs.indexOf(location.pathname);
+
   return (
     <nav className="navbar" style={{ backgroundColor: darkMode ? "#181818" : "#fff" }}>
       <div className="navbar-container">
-        <NavLink to="/" className="brand" onClick={closeMenu}>
-          Invo<span>Pro</span>
-        </NavLink>
+  <NavLink to="/" className="brand" onClick={closeMenu}>
+    Invo<span>Pro</span>
+  </NavLink>
 
-        <div className={`nav-links ${isMobileMenuOpen ? "open" : ""}`}>
-          <NavLink to="/" onClick={closeMenu} className="nav-link">
-            Home
-          </NavLink>
-          <NavLink to="/dashboard" onClick={closeMenu} className="nav-link">
-            Dashboard
-          </NavLink>
-        </div>
+  <div className={`tab-nav ${isMobileMenuOpen ? "open" : ""}`}>
+    <NavLink
+      to="/"
+      className={`tab-link ${location.pathname === "/" ? "active-tab" : ""}`}
+      onClick={closeMenu}
+    >
+      <AiFillHome className="tab-icon" /> Home
+    </NavLink>
+    <NavLink
+      to="/dashboard"
+      className={`tab-link ${location.pathname === "/dashboard" ? "active-tab" : ""}`}
+      onClick={closeMenu}
+    >
+      <MdDashboard className="tab-icon" /> Dashboard
+    </NavLink>
+
+    <span
+  className="tab-slider"
+  style={{
+    transform: `translateX(${activeIndex * 100}%)`,
+  }}
+/>
+  </div>
 
         <div className="nav-actions">
           <button

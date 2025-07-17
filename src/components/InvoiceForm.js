@@ -1,16 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";  
 import "./InvoiceForm.css";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { db } from "../firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { useAuth } from "../AuthContext";
+
 
 function InvoiceForm() {
   const [invoiceDate, setInvoiceDate] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [billTo, setBillTo] = useState({ name: "", contact: "" });
-  const [paymentInfo, setPaymentInfo] = useState({ title: "Payment Information", studio: "", bank: "", account: "" });
-  const [senderInfo, setSenderInfo] = useState({ name: "", address: "", phone: "", email: "" });
+  const [paymentInfo, setPaymentInfo] = useState({
+    title: "Payment Information",
+    studio: "",
+    bank: "",
+    account: "",
+  });
+  const [senderInfo, setSenderInfo] = useState({
+    name: "",
+    address: "",
+    phone: "",
+    email: "",
+  });
   const [items, setItems] = useState([{ qty: "", description: "", price: "" }]);
   const [discount, setDiscount] = useState(0);
+  const { user } = useAuth();
+  useEffect(()=> {
+    const existing = localStorage.getItem("editingInvoice");
+    if (existing) {
+      const data = JSON.parse(existing);
+      setInvoiceNumber(data.number || "");
+      setInvoiceDate(data.date || "");
+      setBillTo({name: data.client || "", contact: data.contact || ""});
+      setItems(data.items || [{qty: "", description:"", price: ""}]);
+      setSenderInfo(data.senderInfo || {
+        name: "",
+        address: "",
+        phone: "",
+        email: "",
+      });
+      setPaymentInfo(data.paymentInfo || {
+        title: "Payment Information",
+        studio: "",
+        bank: "",
+        account: "",
+      });
+      setDiscount(data.discount || 0);
+      localStorage.removeItem("editingInvoice");
+    }
+  }, []);
 
   const handleItemChange = (index, field, value) => {
     const updated = [...items];
@@ -31,35 +70,78 @@ function InvoiceForm() {
   const total = subtotal + cgst + sgst - discount;
 
   const downloadPDF = async () => {
-    
+    // Basic validation to prevent saving empty invoice
+    if (
+      !invoiceNumber ||
+      !billTo.name ||
+      !items.some(item => item.description && item.qty && item.price)
+    ) {
+      alert("❌ Please complete the invoice before downloading.");
+      return;
+    }
+  
     const element = document.getElementById("invoice");
-
-    
+  
     const elementsToHide = element.querySelectorAll(".no-print");
     elementsToHide.forEach((el) => (el.style.display = "none"));
-
-    
+  
     const canvas = await html2canvas(element, { scale: 3, useCORS: true, scrollY: -window.scrollY });
-
-    
+    const thankYouMessage = document.createElement("div");
+    thankYouMessage.innerHTML = `
+    <hr />
+    <p style="text-align: center; margin-top: 20px;">
+    Thank you for your business${user?.displayName ? ", " + user.displayName : ""}!<br/>
+    For any queries, contact: ${senderInfo.email || "your.email@example.com"}
+    </p>
+   `;
+   element.appendChild(thankYouMessage);
+  
     elementsToHide.forEach((el) => (el.style.display = ""));
-
+  
     const imgData = canvas.toDataURL("image/png");
-
-    
+  
     const pdf = new jsPDF("p", "mm", "a4");
-
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+    const invoiceData = {
+      number: invoiceNumber,
+      client: billTo.name,
+      contact: billTo.contact,
+      date: invoiceDate,
+      total: total.toFixed(2),
+      items,
+      cgst: cgst.toFixed(2),
+      sgst: sgst.toFixed(2),
+      discount,
+      senderInfo,
+      paymentInfo,
+      createdAt: Timestamp.now()
+    };
+  
+    const existingInvoices = JSON.parse(localStorage.getItem("invoices")) || [];
+    existingInvoices.push(invoiceData);
+    localStorage.setItem("invoices", JSON.stringify(existingInvoices));
+  
+    try {
+      if (user) {
+        const userInvoicesRef = collection(db, "users", user.uid, "invoices");
+        await addDoc(userInvoicesRef, invoiceData);
+        alert("✅ Invoice saved to dashboard & local storage!");
+      }
+    } catch (error) {
+      console.error("❌ Error saving invoice to Firestore:", error);
+      alert("Invoice saved locally, but Firestore failed.");
+    }
 
-    
+  
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-
-    
     pdf.save(`invoice-${invoiceNumber || "download"}.pdf`);
+    element.removeChild(thankYouMessage);
   };
-
-  const printInvoice = () => window.print();
+  const printInvoice = () => {
+    window.print();
+  };
 
   return (
     <div className="invoice-container" id="invoice">
@@ -233,7 +315,6 @@ function InvoiceForm() {
         </div>
       </div>
 
-      
       <div className="invoice-actions no-print">
         <button onClick={downloadPDF}>Download as PDF</button>
         <button onClick={printInvoice}>Print Invoice</button>

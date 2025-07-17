@@ -1,4 +1,4 @@
-/* Global box-sizing for consistent sizing */
+/*Global box-sizing for consistent sizing */
 *,
 *::before,
 *::after {
@@ -11,8 +11,10 @@
   padding: 40px;
   font-family: Arial, sans-serif;
   background: var(--invoice-bg, #ffffff);
+  color: var(--text-color, #000000);
   border: 1px solid #ccc;
   border-radius: 10px;
+  overflow-x: auto;
 }
 
 .header {
@@ -29,6 +31,7 @@
   flex-direction: column;
   margin-bottom: 10px;
   font-size: 13px;
+  color: var(--text-color, #000000);
 }
 
 .header-input {
@@ -38,6 +41,7 @@
   border-bottom: 1px solid #ccc;
   background-color: transparent;
   width: 100%;
+  color: var(--text-color, #000000);
   box-sizing: border-box;
 }
 
@@ -47,6 +51,9 @@
   width: 100%;
   padding: 6px;
   font-size: 14px;
+  color: var(--text-color, #000000);
+  background-color: transparent;
+  border: 1px solid #ccc;
 }
 
 .invoice-table {
@@ -61,11 +68,12 @@
   border: 1px solid #ddd;
   padding: 6px 8px;
   text-align: center;
-  vertical-align: middle; /* fix vertical alignment */
+  vertical-align: middle;
+  color: var(--text-color, #000000);
 }
 
 .invoice-table input {
-  height: 30px;             /* consistent height */
+  height: 30px;
   line-height: 1.2;
   vertical-align: middle;
   padding: 4px 6px;
@@ -73,7 +81,9 @@
   width: 100%;
   box-sizing: border-box;
   border: 1px solid #ccc;
-  display: block;           /* avoid baseline shift */
+  display: block;
+  color: var(--text-color, #000000);
+  background-color: transparent;
 }
 
 .add-btn {
@@ -85,7 +95,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
-  height: 32px;             /* consistent button height */
+  height: 32px;
   line-height: 1;
 }
 
@@ -96,6 +106,7 @@
 .summary p {
   font-size: 14px;
   margin: 8px 0;
+  color: var(--text-color, #000000);
 }
 
 .summary input {
@@ -104,6 +115,9 @@
   padding: 4px;
   font-size: 13px;
   box-sizing: border-box;
+  color: var(--text-color, #000000);
+  background-color: transparent;
+  border: 1px solid #ccc;
 }
 
 .footer {
@@ -130,6 +144,8 @@
   font-size: 14px;
   box-sizing: border-box;
   border: 1px solid #ccc;
+  color: var(--text-color, #000000);
+  background-color: transparent;
 }
 
 .invoice-actions {
@@ -147,16 +163,14 @@
   cursor: pointer;
   font-weight: bold;
   font-size: 14px;
-  height: 32px;            /* consistent button height */
+  height: 32px;
   line-height: 1;
 }
 
-/* Hide elements with this class when printing or during PDF generation */
 .no-print {
   /* hidden by JS or print */
 }
 
-/* PRINT STYLES */
 @media print {
   .no-print {
     display: none !important;
@@ -193,7 +207,36 @@
     display: none !important;
   }
 }
-[data-theme="dark"]{
+.thank-you-message{
+  font-size: 14px;
+  color: #555;
+}
+
+[data-theme="dark"] {
   --invoice-bg: #1f1f1f;
   --text-color: #f0f0f0;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] .invoice-table th,
+[data-theme="dark"] .invoice-table td,
+[data-theme="dark"] .summary p,
+[data-theme="dark"] .footer-input,
+[data-theme="dark"] .header-label,
+[data-theme="dark"] .header-input,
+[data-theme="dark"] .bill-to input,
+[data-theme="dark"] .summary input {
+  color: #f0f0f0;
+  background-color: transparent;
+}
+
+[data-theme="dark"] .invoice-table input,
+[data-theme="dark"] .footer-input,
+[data-theme="dark"] .summary input,
+[data-theme="dark"] .header-input {
+  border-color: #888;
+}
+
+[data-theme="dark"] .invoice-table {
+  border-color: #999;
 }

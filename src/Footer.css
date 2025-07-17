@@ -1,24 +1,36 @@
 .custom-footer {
-  background-color: #1f1f1f;
-  color: #ccc;
+  background-color: var(--footer-bg, #f9f9f9);
+  color: var(--footer-text, #333);
   padding: 40px 20px 30px;
-  border-top: 1px solid #333;
+  border-top: 1px solid var(--footer-border);
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .footer-content {
   max-width: 1000px;
   margin: 0 auto;
 }
-
-.custom-footer p {
-  font-size: 17px;
-  margin: 0 0 10px;
-  color: #e0e0e0;
-  font-weight: 500;
+footer.custom-footer .footer-credit{
+  color: var(--footer-text, #333);
+  font-size: 0.95rem;
+  margin-top: 20px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  letter-spacing: 0.3px;
 }
-
+[data-theme="dark"] .footer-credit{
+  color: var(--footer-text, #ccc);
+}
+footer.custom-footer .footer-credit:hover{
+  color: #007bff;
+  text-decoration: underline;
+}
+[data-theme="dark"] .footer-credit:hover {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
 .footer-links {
   margin-bottom: 14px;
 }
@@ -41,21 +53,22 @@
 }
 
 .back-to-top {
-  margin-top: 10px;
-  background-color: transparent;
-  border: 1px solid #555;
-  padding: 6px 12px;
-  font-size: 14px;
-  color: #9ddcff;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.3s ease;
+ background-color: var(--back-to-top-bg);
+ color: var(--back-to-top-color);
+ border: none;
+ padding: 10px 16px;
+ border-radius: 6px;
+ font-weight: 500;
+ cusror: pointer;
+ transition: all 0.3s ease;
 }
 
 .back-to-top:hover {
-  background-color: #333;
-  color: #fff;
-  border-color: #9ddcff;
+  background-color: var(--back-to-top-hover-bg, #0056b3);
+  color: var(--back-to-top-hover-text, #fff);
+  border-color: var(--back-to-top-hover-border, #007bff);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
 }
 
 .custom-footer small {
@@ -92,13 +105,77 @@
   align-items: center;
   gap: 24px;
   margin-bottom: 16px;
+  margin-top: 20px;
 }
-.footer-icons a{
-  color: #9ddcff;
+.social-icon {
   font-size: 24px;
   transition: color 0.3s ease, transform 0.3s ease;
 }
-.footer-icons a:hover{
-  color: #d64161;
-  transform: (1.1);
+
+.social-icon.github{
+  color: #555;
+}
+.social-icon.linkedin{
+  color: #0a66c2;
+}
+.social-icon.gmail{
+  color: #d14836;
+}
+[data-theme="dark"] .social-icon.github {
+  color: #bbb;
+}
+
+[data-theme="dark"] .social-icon.linkedin {
+  color: #88b8f9;
+}
+
+[data-theme="dark"] .social-icon.gmail {
+  color: #ffb6b6;
+}
+.social-icon:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.social-icon.github:hover {
+  color: var(--github-hover);
+}
+
+.social-icon.linkedin:hover {
+  color: var(--linkedin-hover);
+}
+
+.social-icon.gmail:hover {
+  color: var(--gmail-hover);
+}
+.tooltip{
+  position: relative;
+  display: inline-block;
+}
+.tooltip .tooltip-text{
+  visibility: hidden;
+  opacity: 0;
+  width: max-content; 
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 12px;
+  transition: opacity 0.15s ease, transform 0.15s ease-in-out;
+}
+.tooltip:hover .tooltip-text{
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+[data-theme="dark"] .tooltip .tool-text{
+  background-color: #eee;
+  color: #111;
 }
