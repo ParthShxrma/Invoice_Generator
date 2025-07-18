@@ -34,16 +34,16 @@
 ## 📸 Screenshots
 
 ### 🏠 Landing Page
-![Landing Page](./assets/landing.png)
+![Landing Page](./assets/landing-page.png)
 
 ### 📂 Dashboard
 ![Dashboard](./assets/dashboard.png)
 
 ### 👤 Profile Page
-![Profile Page](./assets/profile.png)
+![Profile Page](./assets/profile-page.png)
 
 ### 📄 View Invoice
-![Invoice View](./assets/invoice.png)
+![Invoice View](./assets/invoice-form.png)
 
 ---
 
