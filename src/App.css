@@ -15,12 +15,16 @@
   --background: #ffffff;
   --text-color: #222222;
   --section-bg: #f9f9f9;
+  
 
   --shape-bg-light: rgba(255, 255, 255, 0.35);
   --shape-glow-light: rgba(0, 123, 255, 0.3);
 
   --shape-bg-dark: rgba(40, 40, 40, 0.6);
   --shape-glow-dark: rgba(0, 123, 255, 0.7);
+
+  --footer-link-color: #333;
+  --footer-link-hover: #007bff;
 }
 
 /* Dark Theme Defaults */
@@ -40,6 +44,11 @@
   --background: #181818;
   --text-color: #f1f1f1;
   --section-bg: #202020;
+  --card-bg: #1e1e1e;
+  
+
+  --footer-link-color: #ccc;
+  --footer-link-hover: #9ddcff;
 }
 
 body,
@@ -47,12 +56,13 @@ html {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--background);
+  background-color: var(--section-bg);
   color: var(--text-color);
   transition: all 0.3s ease;
 }
 
 .landing-page {
+  background-color: var(--section-bg);
   min-height: 80vh;
   display: flex;
   flex-direction: column;
@@ -69,7 +79,7 @@ html {
   width: 100%;
   height: 100%;
   backdrop-filter: blur(4px);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: transparent;
   z-index: 0;
 }
 

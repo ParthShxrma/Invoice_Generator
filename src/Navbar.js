@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { FaSun, FaMoon, FaBars, FaChevronDown } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
@@ -12,7 +12,9 @@ function Navbar() {
   });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { user, login, logout } = useAuth();
 
@@ -21,45 +23,53 @@ function Navbar() {
     localStorage.setItem("theme", darkMode ? "dark" : "light");
   }, [darkMode]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const toggleTheme = () => setDarkMode(!darkMode);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
   const toggleDropdown = () => setShowDropdown(!showDropdown);
 
-  // Determine active tab index for slider positioning
   const tabs = ["/", "/dashboard"];
   const activeIndex = tabs.indexOf(location.pathname);
 
   return (
     <nav className="navbar" style={{ backgroundColor: darkMode ? "#181818" : "#fff" }}>
       <div className="navbar-container">
-  <NavLink to="/" className="brand" onClick={closeMenu}>
-    Invo<span>Pro</span>
-  </NavLink>
+        <NavLink to="/" className="brand" onClick={closeMenu}>
+          Invo<span>Pro</span>
+        </NavLink>
 
-  <div className={`tab-nav ${isMobileMenuOpen ? "open" : ""}`}>
-    <NavLink
-      to="/"
-      className={`tab-link ${location.pathname === "/" ? "active-tab" : ""}`}
-      onClick={closeMenu}
-    >
-      <AiFillHome className="tab-icon" /> Home
-    </NavLink>
-    <NavLink
-      to="/dashboard"
-      className={`tab-link ${location.pathname === "/dashboard" ? "active-tab" : ""}`}
-      onClick={closeMenu}
-    >
-      <MdDashboard className="tab-icon" /> Dashboard
-    </NavLink>
-
-    <span
-  className="tab-slider"
-  style={{
-    transform: `translateX(${activeIndex * 100}%)`,
-  }}
-/>
-  </div>
+        <div className={`tab-nav ${isMobileMenuOpen ? "open" : ""}`}>
+          <NavLink
+            to="/"
+            className={`tab-link ${location.pathname === "/" ? "active-tab" : ""}`}
+            onClick={closeMenu}
+          >
+            <AiFillHome className="tab-icon" /> Home
+          </NavLink>
+          <NavLink
+            to="/dashboard"
+            className={`tab-link ${location.pathname === "/dashboard" ? "active-tab" : ""}`}
+            onClick={closeMenu}
+          >
+            <MdDashboard className="tab-icon" /> Dashboard
+          </NavLink>
+          <span
+            className="tab-slider"
+            style={{ transform: `translateX(${activeIndex * 100}%)` }}
+          />
+        </div>
 
         <div className="nav-actions">
           <button
@@ -71,7 +81,7 @@ function Navbar() {
           </button>
 
           {user ? (
-            <div className="user-dropdown">
+            <div className="user-dropdown" ref={dropdownRef}>
               <button
                 className="user-toggle"
                 onClick={toggleDropdown}
@@ -80,7 +90,13 @@ function Navbar() {
                 {user.displayName.split(" ")[0]} <FaChevronDown />
               </button>
               {showDropdown && (
-                <div className="dropdown-menu">
+                <div className="dropdown-menu animate-dropdown">
+                  <button onClick={() => navigate("/profile")} className="dropdown-item">
+                    View Profile
+                  </button>
+                  <button onClick={() => navigate("/dashboard")} className="dropdown-item">
+                    My Invoices
+                  </button>
                   <button onClick={logout} className="dropdown-item">
                     Logout
                   </button>

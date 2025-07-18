@@ -36,7 +36,7 @@ footer.custom-footer .footer-credit:hover{
 }
 
 .footer-links a {
-  color: #9ddcff;
+  color: var(--footer-link-color);
   margin: 0 8px;
   text-decoration: none;
   font-weight: 500;
@@ -44,7 +44,7 @@ footer.custom-footer .footer-credit:hover{
 }
 
 .footer-links a:hover {
-  color: #ffffff;
+  color: var(--footer-link-hover);
 }
 
 .footer-links span {
