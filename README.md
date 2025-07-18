@@ -52,8 +52,8 @@
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/your-username/invoPro.git
-cd invoPro
+git clone https://github.com/ParthShrxma/Invoice_Generator.git
+cd Invoice_Generator
 ```
 
 ### 2️⃣ Install dependencies
